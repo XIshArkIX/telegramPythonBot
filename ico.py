@@ -1,11 +1,3 @@
-# file = open('./favicon.ico')
-# total = file.__str__()
-# fileType = file.read()
-# currentPosition = file.tell()
-# result += (currentPosition)
-# file.close()
-
-
 def bytesToInt(bytes: bytes, byteorder='little'):
     return int.from_bytes(bytes, byteorder)
 

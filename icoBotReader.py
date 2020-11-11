@@ -53,7 +53,7 @@ def handle_text_doc(message: types.Message):
     # print(file.content[4:6])
     bot.send_message(
         message.chat.id,
-        f'Вот информацию о файле:\n{icoFromBytes(file.content)}'
+        f'Вот информация о файле:\n{icoFromBytes(file.content)}'
     )
 
 
