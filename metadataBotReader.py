@@ -3,10 +3,11 @@ from telebot import types
 # import random
 import requests
 import json
-from ico import icoFromBytes
+from modules.icoModule import icoFromBytes
+from modules.pngModule import pngFromBytes
 
 global bot
-supportedTypes = ['ICO']
+supportedTypes = ['ICO', 'PNG']
 
 try:
     settingsFile = open('./settings.json')
@@ -41,19 +42,36 @@ def msg_preview(message: types.Message):
     ),
     content_types=['document']
 )
-def handle_text_doc(message: types.Message):
+def handleIco(message: types.Message):
     file_info = bot.get_file(message.document.file_id)
     file = requests.get(
-        'https://api.telegram.org/file/bot{0}/{1}'.format(
-                bot.token,
-                file_info.file_path
-            ),
+        f'https://api.telegram.org/file/bot{bot.token}/{file_info.file_path}',
         stream=True
-        )
-    # print(file.content[4:6])
+    )
     bot.send_message(
         message.chat.id,
         f'Вот информация о файле:\n{icoFromBytes(file.content)}'
+    )
+
+
+@bot.message_handler(
+    func=lambda
+    message: (
+        message and
+        message.document and
+        message.document.mime_type == 'image/png'
+    ),
+    content_types=['document']
+)
+def handlePng(message: types.Message):
+    file_info = bot.get_file(message.document.file_id)
+    file = requests.get(
+        f'https://api.telegram.org/file/bot{bot.token}/{file_info.file_path}',
+        stream=True
+    )
+    bot.send_message(
+        message.chat.id,
+        f'Вот информация о файле:\n{pngFromBytes(file.content)}'
     )
 
 
